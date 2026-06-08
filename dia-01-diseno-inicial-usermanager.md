@@ -72,3 +72,6 @@ Ruta:
 
 ## Descripción propia de API
 Una API es una aplicación que hace de puente entre la comunicación del cliente y el servidor. Así se puede crear, modificar, borrar u obtener datos con una capa de seguridad.
+
+## Fecha
+Fecha de inicio del proyecto 08-06-2026
