@@ -26,6 +26,22 @@ app.get("/api/info", (req, res) => {
     });
 });
 
+// --- Dia 3: Añadir ruta health ---
+app.get("/api/health", (req, res) => {
+        res.status(200).json({
+            status: "ok",
+            message: "UserManager API funcionando",
+            timestamp: new Date().toISOString()
+        });
+});
+
+// --- Dia 3: Parte libre ---
+app.get("/api/ping", (req, res) => {
+    res.json({
+        message: "Pong"
+    });
+});
+
 app.listen(PORT, () => {
     console.log(`Servidor escuchando en http://localhost:${PORT}`);
 }); 
