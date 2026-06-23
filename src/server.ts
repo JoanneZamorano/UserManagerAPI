@@ -116,6 +116,83 @@ app.patch("/api/users/:id/role", (req, res) => {
     });
 });
 
+//Dia 5 - Paso 3: Crear una ruta para probar body
+app.post("/api/debug/body", (req, res) => {
+    res.status(200).json({
+        message: "Body recibido correctamente",
+        body: req.body
+    });
+});
+
+//Dia 5- Paso 4: Crear una ruta para probar params
+app.get("/api/debug/params/:id", (req, res) => {
+    res.status(200).json({
+        message: "Params recibidos correctamente",
+        params: req.params
+    });
+});
+
+//Dia 5- Paso 5: Crear una ruta para probar query params
+app.get("/api/debug/query", (req, res) => {
+    res.status(200).json({
+        message: "Query params recibidos correctamente",
+        query: req.query
+    });
+});
+
+//Dia 5- Paso 6: Crear una ruta para probar headers
+app.get("/api/debug/headers", (req, res) => {
+    res.status(200).json({
+        message: "Headers recibidos correctamente",
+        headers: req.headers
+    });
+});
+
+//Dia 5- Paso 7: Crear una ruta combinada
+app.patch("/api/debug/users/:id", (req, res) => {
+    const { id } = req.params;
+    const { notify } = req.query;
+    const authorization = req.headers.authorization;
+    const changes = req.body;
+
+    res.status(200).json({
+        message: "Datos combinados recibidos",
+        id,
+        notify,
+        authorization,
+        changes
+    });
+});
+
+//Dia 5 - Tarea libre 1: Crear una ruta de búsqueda simulada
+app.get("/api/users/search", (req, res) => {
+    res.status(200).json({
+        "message": "Búsqueda de usuarios",
+        "filters": {
+            "name": "ana",
+            "role": "USER"
+        }
+    });
+});
+
+//Dia 5 - Tarea libre 2: Crear una ruta de cambio de contraseña simulada
+app.patch("/api/users/me/password", (req, res) => {
+    const { currentPassword, newPassword } = req.body;
+    res.status(200).json({
+        "message": "Solicitud de cambio de contraseña recibida"
+    });
+});
+
+//Dia 5 - Tarea libre 3: Leer un header personalizado
+app.get("/api/debug/client", (req, res) => {
+    const clientHeader = req.headers["x-client-name"];
+    res.status(200).json({
+        client: clientHeader
+    });
+});
+
+
+
 app.listen(PORT, () => {
     console.log(`Servidor escuchando en http://localhost:${PORT}`);
 }); 
