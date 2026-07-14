@@ -53,7 +53,10 @@ app.get("/api/users", (req, res) => {
 //Dia 4: POST Users
 app.post("/api/users", (req, res) => {
     const userData = req.body;
-        res.status(201).json({
+
+    console.log("Body recibido en POST /api/users:", userData);
+
+    res.status(201).json({
         message: "Usuario recibido para crear",
         data: userData
     });
@@ -196,3 +199,17 @@ app.get("/api/debug/client", (req, res) => {
 app.listen(PORT, () => {
     console.log(`Servidor escuchando en http://localhost:${PORT}`);
 }); 
+
+
+//Dia 6 - Paso 6: Crear una ruta temporal para depuración
+app.post("/api/debug/request", (req, res) => {
+    res.status(200).json({
+        message: "Información completa de la petición",
+        method: req.method,
+        path: req.path,
+        params: req.params,
+        query: req.query,
+        headers: req.headers,
+        body: req.body
+    });
+});
