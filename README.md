@@ -88,6 +88,46 @@ Respuesta de ejemplo:
 }
 ```
 
+## Endpoints de usuarios
+
+```http
+GET /api/users
+GET /api/users/:id
+```
+
+### GET /api/users/:id
+
+Devuelve un usuario concreto a partir de su ID.
+
+Respuesta correcta:
+
+```json
+{
+  "message": "Usuario encontrado",
+  "data": {
+    "id": 1,
+    "name": "Ana García",
+    "email": "ana@email.com",
+    "role": "USER",
+    "isActive": true
+  }
+}
+```
+
+Posibles errores:
+
+```json
+{
+  "error": "El ID debe ser un número"
+}
+```
+
+```json
+{
+  "error": "Usuario no encontrado"
+}
+```
+
 ## Documentación del reto
 
 - [Día 1 - Diseño inicial](docs/dia-01-diseno-inicial.md)
@@ -97,3 +137,4 @@ Respuesta de ejemplo:
 - [Día 5 - JSON, body, params y headers](docs/dia-05-json-body-params-headers.md)
 - [Día 6 - Cliente HTTP y depuración](docs/dia-06-cliente-http-depuracion.md)
 - [Día 7 - Listado de usuarios en memoria](docs/dia-07-listado-usuarios.md)
+- [Día 8 - Consultar usuario por ID](docs/dia-08-consultar-usuario-id.md)

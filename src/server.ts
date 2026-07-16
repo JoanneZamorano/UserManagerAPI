@@ -104,6 +104,29 @@ app.post("/api/users", (req, res) => {
     });
 });
 
+app.get("/api/users/:id", (req, res) => {
+    const id = Number(req.params.id);
+
+    if (Number.isNaN(id)) {
+        return res.status(400).json({
+        error: "El ID debe ser un número"
+        });
+    }
+
+    const user = users.find((user) => user.id === id);
+
+    if (!user) {
+        return res.status(404).json({
+        error: "Usuario no encontrado"
+        });
+    }
+
+    return res.status(200).json({
+        message: "Usuario encontrado",
+        data: user
+    });
+});
+
 //Dia 4: PATCH Users
 app.patch("/api/users/:id", (req, res) => {
     const { id } = req.params;
