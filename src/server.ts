@@ -13,6 +13,7 @@ type User = {
     updatedAt: string;
 };
 
+
 // Datos temporales en memoria. Más adelante se sustituirán por una base de datos.
 const users: User[] = [
     {
@@ -43,6 +44,7 @@ const users: User[] = [
         updatedAt: new Date().toISOString()
     }
 ];
+
 
 app.use(express.json());
 
@@ -94,13 +96,47 @@ app.get("/api/users", (req, res) => {
 
 //Dia 4: POST Users
 app.post("/api/users", (req, res) => {
-    const userData = req.body;
+    const { name, email, password } = req.body;
 
-    console.log("Body recibido en POST /api/users:", userData);
+    if (!name || !email || !password) {
+        return res.status(400).json({
+        error: "name, email y password son obligatorios"
+        });
+    }
 
-    res.status(201).json({
-        message: "Usuario recibido para crear",
-        data: userData
+    if (password.length < 6) {
+        return res.status(400).json({
+        error: "La contraseña debe tener al menos 6 caracteres"
+        });
+    }
+
+    const existingUser = users.find((user) => user.email === email);
+
+    if (existingUser) {
+        return res.status(409).json({
+        error: "El email ya está registrado"
+        });
+    }
+
+    const newId = users.length > 0
+        ? Math.max(...users.map((user) => user.id)) + 1
+        : 1;
+
+    const newUser: User = {
+        id: newId,
+        name,
+        email,
+        role: "USER",
+        isActive: true,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+    };
+
+    users.push(newUser);
+
+    return res.status(201).json({
+        message: "Usuario creado correctamente",
+        data: newUser
     });
 });
 
