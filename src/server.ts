@@ -53,6 +53,21 @@ function isBoolean(value: unknown): value is boolean {
     return typeof value === "boolean";
 }
 
+function normalizeEmail(email: string): string {
+    return email.trim().toLowerCase();
+}
+
+function isValidBasicEmail(value: string): boolean {
+    return value.includes("@") && value.includes(".");
+}
+
+function isEmailTaken(email: string, userIdToIgnore?: number): boolean {
+    const normalizedEmail = normalizeEmail(email);
+
+    return users.some(
+        (user) => user.email === normalizedEmail && user.id !== userIdToIgnore
+    );
+}
 
 app.use(express.json());
 
@@ -125,7 +140,7 @@ app.post("/api/users", (req, res) => {
     }
 
     const cleanName = name.trim();
-    const cleanEmail = email.trim().toLowerCase();
+    const cleanEmail = normalizeEmail(email);
     const cleanPassword = password.trim();
 
     if (cleanPassword.length < 6) {
@@ -134,15 +149,13 @@ app.post("/api/users", (req, res) => {
         });
     }
 
-    if (!cleanEmail.includes("@")) {
+    if (!isValidBasicEmail(cleanEmail)) {
         return res.status(400).json({
             error: "El email no tiene un formato válido"
         });
     }
 
-    const existingUser = users.find((user) => user.email === cleanEmail);
-
-    if (existingUser) {
+    if (isEmailTaken(cleanEmail)) {
         return res.status(409).json({
             error: "El email ya está registrado"
         });
@@ -249,9 +262,9 @@ app.patch("/api/users/:id", (req, res) => {
             });
         }
 
-        cleanEmail = email.trim().toLowerCase();
+        cleanEmail = normalizeEmail(email);
 
-        if (!cleanEmail.includes("@")) {
+        if (!isValidBasicEmail(cleanEmail)) {
             return res.status(400).json({
                 error: "El email no tiene un formato válido"
             });
@@ -261,7 +274,7 @@ app.patch("/api/users/:id", (req, res) => {
             (user) => user.email === cleanEmail && user.id !== id
         );
 
-        if (emailAlreadyExists) {
+        if (isEmailTaken(cleanEmail, id)) {
             return res.status(409).json({
                 error: "El email ya está registrado"
             });
