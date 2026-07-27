@@ -6,7 +6,10 @@
   "scripts": {
     "dev": "tsx watch src/server.ts",
     "build": "tsc",
-    "start": "node dist/server.js"
+    "start": "node dist/server.js",
+    "prisma:validate": "prisma validate",
+    "prisma:generate": "prisma generate",
+    "prisma:studio": "prisma studio"
   },
   "repository": {
     "type": "git",
@@ -21,12 +24,15 @@
   },
   "homepage": "https://github.com/JoanneZamorano/UserManagerAPI#readme",
   "devDependencies": {
+    "@prisma/config": "^7.9.0",
     "@types/express": "^5.0.6",
-    "@types/node": "^25.9.3",
+    "@types/node": "^25.9.5",
+    "dotenv": "^17.4.2",
     "tsx": "^4.22.4",
     "typescript": "^6.0.3"
   },
   "dependencies": {
+    "@prisma/client": "^7.9.0",
     "express": "^5.2.1"
   }
 }
