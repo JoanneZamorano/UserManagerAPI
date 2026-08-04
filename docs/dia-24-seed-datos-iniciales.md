@@ -78,6 +78,6 @@ Creación de seed:
 
 ![Imagen](./images/dia24_1.png) 
 
-Comprobación de seed en prisma y postgres
+Comprobación de seed en prisma y postgres:
 
 ![Imagen](./images/dia24_2.png) 
