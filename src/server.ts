@@ -1,5 +1,7 @@
 import express, { Request, Response, NextFunction } from "express";
 import { prisma } from "./prisma";
+import { healthRouter } from "./routes/health.routes";
+import { debugPrismaRouter } from "./routes/debug-prisma.routes";
 
 const app = express();
 const PORT = 3000;
@@ -16,15 +18,6 @@ type User = {
     updatedAt: string;
 };
 
-const userSafeSelect = {
-    id: true,
-    name: true,
-    email: true,
-    role: true,
-    isActive: true,
-    createdAt: true,
-    updatedAt: true
-} as const;
 
 // Datos temporales en memoria. Más adelante se sustituirán por una base de datos.
 const users: User[] = [
@@ -128,141 +121,18 @@ function isPrismaUniqueError(error: unknown) {
     );
 }
 
-//------------------------------------------------------------------
+//------------Routes
 
-//Dia 25: GET /api/debug/prisma/users
-app.get("/api/debug/prisma/users", async (req, res, next) => {
-    try {
-        const users = await prisma.user.findMany({
-            select: userSafeSelect,
-            orderBy: {
-                id: "asc"
-            }   
-        });
+//Dia 26: /api/health
+app.use("/api/health", healthRouter);
 
-        return res.status(200).json({
-            message: "Usuarios obtenidos con Prisma",
-            total: users.length,
-            data: users
-        });
-    } catch (error) {
-        next(error);
-    }
-});
+//Dia 26: /api/debug/prisma
+app.use("/api/debug/prisma", debugPrismaRouter);
 
-//Dia 25: GET /api/debug/prisma/users-active
-app.get("/api/debug/prisma/users-active", async (req, res, next) => {
-    try {
-        const users = await prisma.user.findMany({
-            where: {
-                isActive: true
-            },
-            select: userSafeSelect,
-            orderBy: {
-                id: "asc"
-            }
-        });
 
-        return res.status(200).json({
-            message: "Usuarios activos obtenidos con Prisma",
-            total: users.length,
-            data: users
-        });
-    } catch (error) {
-        next(error);
-    }
-});
 
-//Dia 25: GET /api/debug/prisma/users/:id
-app.get("/api/debug/prisma/users/:id", async (req, res, next) => {
-    try {
-        const id = Number(req.params.id);
 
-        if (Number.isNaN(id)) {
-            return res.status(400).json({
-                error: "El ID debe ser un número"
-            });
-        }
-
-        const user = await prisma.user.findUnique({
-            where: {
-                id
-            },
-            select: userSafeSelect
-        });
-
-        if (!user) {
-            return res.status(404).json({
-                error: "Usuario no encontrado"
-            });
-        }
-
-        return res.status(200).json({
-            message: "Usuario encontrado con Prisma",
-            data: user
-        });
-    } catch (error) {
-        next(error);
-    }
-});
-
-//Dia 25: POST /api/debug/prisma/users
-app.post("/api/debug/prisma/users", async (req, res, next) => {
-    try {
-        const { name, email, password } = req.body;
-
-        if (!name || !email || !password) {
-            return res.status(400).json({
-                error: "name, email y password son obligatorios"
-            });
-        }
-
-        const cleanName = String(name).trim();
-        const cleanEmail = String(email).trim().toLowerCase();
-        const cleanPassword = String(password).trim();
-
-        if (cleanName.length === 0) {
-            return res.status(400).json({
-                error: "El nombre no puede estar vacío"
-            });
-        }
-
-        if (!cleanEmail.includes("@") || !cleanEmail.includes(".")) {
-            return res.status(400).json({
-                error: "El email no tiene un formato válido"
-            });
-        }
-
-        if (cleanPassword.length < 6) {
-            return res.status(400).json({
-                error: "La contraseña debe tener al menos 6 caracteres"
-            });
-        }
-
-        const createdUser = await prisma.user.create({
-            data: {
-                name: cleanName,
-                email: cleanEmail,
-                passwordHash: `hash_temporal_${cleanPassword}`
-            },
-            select: userSafeSelect
-        });
-
-        return res.status(201).json({
-            message: "Usuario creado con Prisma",
-            data: createdUser
-        });
-        } catch (error) {
-            if (isPrismaUniqueError(error)) {
-                return res.status(409).json({
-                    error: "El email ya está registrado"
-                });
-        }
-
-        next(error);
-    }
-});
-
+//------------Codigo anterior
 
 // --- Tarea libre 1: Personalizar el mensaje inicial ---
 app.get("/", (req, res) => {
@@ -285,14 +155,7 @@ app.get("/api/info", (req, res) => {
     });
 });
 
-// --- Dia 3: Añadir ruta health ---
-app.get("/api/health", (req, res) => {
-        res.status(200).json({
-            status: "ok",
-            message: "UserManager API funcionando",
-            timestamp: new Date().toISOString()
-        });
-});
+
 
 // --- Dia 3: Parte libre ---
 app.get("/api/ping", (req, res) => {
