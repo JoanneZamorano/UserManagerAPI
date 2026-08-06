@@ -1,5 +1,11 @@
 import { Request, Response, NextFunction } from "express";
-import { prisma } from "../prisma";
+import {
+    createDebugUserService,
+    getActiveUsersService,
+    getUserByIdService,
+    getUsersService
+} from "../services/user.service";
+import { AppError } from "../errors/AppError";
 
 const userSafeSelect = {
     id: true,
@@ -17,15 +23,7 @@ export async function getActiveUsers(
     next: NextFunction
     ) {
     try {
-        const users = await prisma.user.findMany({
-        where: {
-            isActive: true
-        },
-        select: userSafeSelect,
-        orderBy: {
-            id: "asc"
-        }
-        });
+        const users = await getActiveUsersService();
 
         return res.status(200).json({
         message: "Usuarios activos obtenidos con Prisma",
@@ -43,12 +41,7 @@ export async function getUsers(
     next: NextFunction
     ) {
     try {
-        const users = await prisma.user.findMany({
-        select: userSafeSelect,
-        orderBy: {
-            id: "asc"
-        }
-        });
+        const users = await getUsersService();
 
         return res.status(200).json({
         message: "Usuarios obtenidos con Prisma",
@@ -69,23 +62,12 @@ export async function getUserById(
         const id = Number(req.params.id);
 
         if (Number.isNaN(id)) {
-        return res.status(400).json({
-            error: "El ID debe ser un número"
+        throw new AppError("El ID debe ser un número", 400, {
+            received: req.params.id
         });
         }
 
-        const user = await prisma.user.findUnique({
-        where: {
-            id
-        },
-        select: userSafeSelect
-        });
-
-        if (!user) {
-        return res.status(404).json({
-            error: "Usuario no encontrado"
-        });
-        }
+        const user = await getUserByIdService(id);
 
         return res.status(200).json({
         message: "Usuario encontrado con Prisma",
@@ -102,56 +84,13 @@ export async function createDebugUser(
     next: NextFunction
     ) {
     try {
-        const { name, email, password } = req.body;
-
-        if (!name || !email || !password) {
-        return res.status(400).json({
-            error: "name, email y password son obligatorios"
-        });
-        }
-
-        const cleanName = String(name).trim();
-        const cleanEmail = String(email).trim().toLowerCase();
-        const cleanPassword = String(password).trim();
-
-        if (cleanName.length === 0) {
-        return res.status(400).json({
-            error: "El nombre no puede estar vacío"
-        });
-        }
-
-        if (!cleanEmail.includes("@") || !cleanEmail.includes(".")) {
-        return res.status(400).json({
-            error: "El email no tiene un formato válido"
-        });
-        }
-
-        if (cleanPassword.length < 6) {
-        return res.status(400).json({
-            error: "La contraseña debe tener al menos 6 caracteres"
-        });
-        }
-
-        const createdUser = await prisma.user.create({
-        data: {
-            name: cleanName,
-            email: cleanEmail,
-            passwordHash: `hash_temporal_${cleanPassword}`
-        },
-        select: userSafeSelect
-        });
+        const createdUser = await createDebugUserService(req.body);
 
         return res.status(201).json({
         message: "Usuario creado con Prisma",
         data: createdUser
         });
-    } catch (error: any) {
-        if (error.code === "P2002") {
-        return res.status(409).json({
-            error: "El email ya está registrado"
-        });
-        }
-
+    } catch (error) {
         next(error);
     }
 }
