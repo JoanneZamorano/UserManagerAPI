@@ -1,11 +1,6 @@
 import { Router } from "express";
+import { getHealth } from "../controllers/health.controller";
 
 export const healthRouter = Router();
 
-healthRouter.get("/", (req, res) => {
-    return res.status(200).json({
-        status: "ok",
-        message: "UserManager API funcionando",
-        timestamp: new Date().toISOString()
-    });
-});
+healthRouter.get("/", getHealth);
