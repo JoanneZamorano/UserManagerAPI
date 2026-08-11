@@ -9,9 +9,6 @@ import {
 export const debugPrismaRouter = Router();
 
 debugPrismaRouter.get("/users-active", getActiveUsers);
-
 debugPrismaRouter.get("/users", getUsers);
-
 debugPrismaRouter.get("/users/:id", getUserById);
-
 debugPrismaRouter.post("/users", createDebugUser);
