@@ -20,13 +20,16 @@
 
 ## Rutas reales creadas
 
-| Método | Ruta | Acción |
-| --- | --- |---|
-| GET | `/api/users` | Listar usuarios |
-| GET | `/api/users/:id` | Consultar usuario |
-| POST | `/api/users` | Crear usuario |
-| PATCH | `/api/users/:id` | Actualizar usuario |
-| DELETE | `/api/users/:id` | Desactivar usuario |
+| Método | Ruta | Acción | Captura |
+| --- | --- |---| --- |
+| GET | `/api/users` | Listar usuarios | ![Imagen](./images/dia30_1.png) |
+| GET | `/api/users/:id` | Consultar usuario | 200 OK: ![Imagen](./images/dia30_2.png) 404 Not Found: ![Imagen](./images/dia30_3.png) 400 Bad Request: ![Imagen](./images/dia30_4.png) |
+| POST | `/api/users` | Crear usuario | ![Imagen](./images/dia30_5.png) |
+| PATCH | `/api/users/:id` | Actualizar usuario | correcto: ![Imagen](./images/dia30_6.png) actualizacion sin campos: ![Imagen](./images/dia30_7.png) email duplicado en actualizacion: ![Imagen](./images/dia30_8.png) |
+| DELETE | `/api/users/:id` | Desactivar usuario | Correcto: ![Imagen](./images/dia30_9.png) Borrado duplicado: ![Imagen](./images/dia30_10.png) |
+
+Comprobación en Prisma y Posgres:
+![Imagen](./images/dia30_11.png) 
 
 ## Flujo actual
 
