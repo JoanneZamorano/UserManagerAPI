@@ -2,6 +2,7 @@ import express, { Request, Response, NextFunction } from "express";
 import { prisma } from "./prisma";
 import { healthRouter } from "./routes/health.routes";
 import { debugPrismaRouter } from "./routes/debug-prisma.routes";
+import { userRouter } from "./routes/user.routes";
 
 const app = express();
 const PORT = 3000;
@@ -129,6 +130,8 @@ app.use("/api/health", healthRouter);
 //Dia 26: /api/debug/prisma
 app.use("/api/debug/prisma", debugPrismaRouter);
 
+//Dia 30: /api/users
+app.use("/api/users", userRouter);
 
 
 
