@@ -1,15 +1,12 @@
 import { Request, Response, NextFunction } from "express";
 import {
-    createDebugUserService,
-    getActiveUsersService,
     getUserByIdService,
-    getUsersService,
     createUserService,
     deactivateUserService,
     listUsersService,
     updateUserService
 } from "../services/user.service";
-import { AppError } from "../errors/AppError";
+import { parseIdParam } from "../utils/parse.utils";
 
 const userSafeSelect = {
     id: true,
@@ -21,55 +18,13 @@ const userSafeSelect = {
     updatedAt: true
 } as const;
 
-export async function getActiveUsers(
-    req: Request,
-    res: Response,
-    next: NextFunction
-    ) {
-    try {
-        const users = await getActiveUsersService();
-
-        return res.status(200).json({
-        message: "Usuarios activos obtenidos con Prisma",
-        total: users.length,
-        data: users
-        });
-    } catch (error) {
-        next(error);
-    }
-}
-
-export async function getUsers(
-    req: Request,
-    res: Response,
-    next: NextFunction
-    ) {
-    try {
-        const users = await getUsersService();
-
-        return res.status(200).json({
-        message: "Usuarios obtenidos con Prisma",
-        total: users.length,
-        data: users
-        });
-    } catch (error) {
-        next(error);
-    }
-}
-
 export async function getUserById(
     req: Request,
     res: Response,
     next: NextFunction
     ) {
     try {
-        const id = Number(req.params.id);
-
-        if (Number.isNaN(id)) {
-        throw new AppError("El ID debe ser un número", 400, {
-            received: req.params.id
-        });
-        }
+        const id = parseIdParam(req.params.id as string);
 
         const user = await getUserByIdService(id);
 
@@ -82,22 +37,6 @@ export async function getUserById(
     }
 }
 
-export async function createDebugUser(
-    req: Request,
-    res: Response,
-    next: NextFunction
-    ) {
-    try {
-        const createdUser = await createDebugUserService(req.body);
-
-        return res.status(201).json({
-        message: "Usuario creado con Prisma",
-        data: createdUser
-        });
-    } catch (error) {
-        next(error);
-    }
-}
 
 //Dia 30-----------------
 export async function listUsers(
@@ -141,13 +80,7 @@ export async function updateUserController(
     next: NextFunction
     ) {
     try {
-        const id = Number(req.params.id);
-
-        if (Number.isNaN(id)) {
-        throw new AppError("El ID debe ser un número", 400, {
-            received: req.params.id
-        });
-        }
+        const id = parseIdParam(req.params.id as string);
 
         const updatedUser = await updateUserService(id, req.body);
 
@@ -166,13 +99,7 @@ export async function deleteUserController(
     next: NextFunction
     ) {
     try {
-        const id = Number(req.params.id);
-
-        if (Number.isNaN(id)) {
-        throw new AppError("El ID debe ser un número", 400, {
-            received: req.params.id
-        });
-        }
+        const id = parseIdParam(req.params.id as string);
 
         const deactivatedUser = await deactivateUserService(id);
 

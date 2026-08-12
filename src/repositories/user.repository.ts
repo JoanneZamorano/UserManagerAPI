@@ -34,18 +34,6 @@ export function findAllUsers() {
     });
 }
 
-export function findActiveUsers() {
-    return prisma.user.findMany({
-        where: {
-        isActive: true
-        },
-        select: userSafeSelect,
-        orderBy: {
-        id: "asc"
-        }
-    });
-}
-
 export function findUserById(id: number) {
     return prisma.user.findUnique({
         where: {
