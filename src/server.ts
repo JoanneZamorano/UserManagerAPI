@@ -1,6 +1,7 @@
 import express, { Request, Response, NextFunction } from "express";
 import { healthRouter } from "./routes/health.routes";
 import { userRouter } from "./routes/user.routes";
+import { authRouter } from "./routes/auth.routes";
 
 const app = express();
 const PORT = 3000;
@@ -9,6 +10,7 @@ app.use(express.json());
 
 app.use("/api/health", healthRouter);
 app.use("/api/users", userRouter);
+app.use("/api/auth", authRouter);
 
 function notFoundMiddleware(req: Request, res: Response, next: NextFunction) {
     next(
