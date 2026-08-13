@@ -1,5 +1,6 @@
 import { PrismaPg } from "@prisma/adapter-pg";
 import { PrismaClient, Role } from "../src/generated/prisma/client";
+import bcrypt from "bcrypt";
 
 const adapter = new PrismaPg({
     connectionString: process.env.DATABASE_URL
@@ -7,16 +8,24 @@ const adapter = new PrismaPg({
 
 const prisma = new PrismaClient({ adapter });
 
+const SALT_ROUNDS = 10;
+
 async function main() {
+    const adminPasswordHash = await bcrypt.hash("admin123", SALT_ROUNDS);
+    const userPasswordHash = await bcrypt.hash("user123", SALT_ROUNDS);
+    const inactivePasswordHash = await bcrypt.hash("inactive123", SALT_ROUNDS);
+    
     const admin = await prisma.user.upsert({
         where: {
             email: "admin@email.com"
         },
-        update: {},
+        update: {
+            passwordHash: adminPasswordHash
+        },
         create: {
             name: "Admin Principal",
             email: "admin@email.com",
-            passwordHash: "hash_temporal_admin123",
+            passwordHash: adminPasswordHash,
             role: Role.ADMIN,
             isActive: true
         }
@@ -26,11 +35,13 @@ async function main() {
         where: {
             email: "user@email.com"
         },
-        update: {},
+        update: {
+            passwordHash: userPasswordHash
+        },
         create: {
             name: "Usuario Demo",
             email: "user@email.com",
-            passwordHash: "hash_temporal_user123",
+            passwordHash: userPasswordHash,
             role: Role.USER,
             isActive: true
         }
@@ -40,11 +51,13 @@ async function main() {
         where: {
             email: "inactive@email.com"
         },
-        update: {},
+        update: {
+            passwordHash: inactivePasswordHash
+        },
         create: {
             name: "Usuario Inactivo",
             email: "inactive@email.com",
-            passwordHash: "hash_temporal_inactive123",
+            passwordHash: inactivePasswordHash,
             role: Role.USER,
             isActive: false
         }

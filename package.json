@@ -27,6 +27,7 @@
   "homepage": "https://github.com/JoanneZamorano/UserManagerAPI#readme",
   "devDependencies": {
     "@prisma/config": "^7.9.0",
+    "@types/bcrypt": "^6.0.0",
     "@types/express": "^5.0.6",
     "@types/node": "^25.9.5",
     "dotenv": "^17.4.2",
@@ -36,6 +37,7 @@
   "dependencies": {
     "@prisma/adapter-pg": "^7.9.1",
     "@prisma/client": "^7.9.0",
+    "bcrypt": "^6.0.0",
     "express": "^5.2.1"
   }
 }
