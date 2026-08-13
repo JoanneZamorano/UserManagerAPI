@@ -1,5 +1,6 @@
-import { Role } from "@prisma/client";
 import { prisma } from "../prisma";
+import { Role } from "../generated/prisma/client";
+
 
 const userSafeSelect = {
     id: true,

@@ -12,13 +12,9 @@ import {
     isValidBasicEmail,
     normalizeEmail
 } from "../utils/string.utils";
+import { hashPassword } from "../utils/password.utils";
 
 //-------------------------------
-type CreateDebugUserInput = {
-    name: unknown;
-    email: unknown;
-    password: unknown;
-};
 
 type CreateUserInput = {
     name: unknown;
@@ -80,10 +76,12 @@ export async function createUserService(input: CreateUserInput) {
         });
     }
 
+    const passwordHash = await hashPassword(cleanPassword);
+
     return createUser({
         name: cleanName,
         email: cleanEmail,
-        passwordHash: `hash_temporal_${cleanPassword}`
+        passwordHash
     });
 }
 
