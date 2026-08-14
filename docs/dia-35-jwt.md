@@ -94,11 +94,10 @@ graph LR
 | --- | --- |
 | `jsonwebtoken` instalado | ![Imagen](./images/dia35_1.png) |
 | `@types/jsonwebtoken` instalado | ![Imagen](./images/dia35_2.png) |
-| `JWT_SECRET` configurado | ![Imagen](./images/dia35_3.png) |
-| `JWT_EXPIRES_IN` configurado | ![Imagen](./images/dia35_4.png) |
+| `JWT_SECRET` configurado y `JWT_EXPIRES_IN` configurado | ![Imagen](./images/dia35_4.png) |
 | `jwt.utils.ts` creado | ![Imagen](./images/dia35_5.png) |
 | Login correcto devuelve token | ![Imagen](./images/dia35_6.png) |
 | Login incorrecto no devuelve token | ![Imagen](./images/dia35_7.png) |
 | Token contiene tres partes separadas por puntos | ![Imagen](./images/dia35_8.png) |
-| Token no contiene passwordHash | ![Imagen](./images/dia35_9.png) |
+| Token no contiene passwordHash | No lo contiene |
 | `npm run build` funciona | ![Imagen](./images/dia35_10.png) |
