@@ -6,6 +6,7 @@ import {
     isValidBasicEmail,
     normalizeEmail
 } from "../utils/string.utils";
+import { generateToken } from "../utils/jwt.utils";
 
 type RegisterInput = {
     name: unknown;
@@ -106,7 +107,14 @@ export async function loginService(input: LoginInput) {
 
     const safeUser = removePasswordHash(user);
 
+    const token = generateToken({
+        userId: user.id,
+        email: user.email,
+        role: user.role
+    });
+
     return {
-        user: safeUser
+        user: safeUser,
+        token
     };
 }
