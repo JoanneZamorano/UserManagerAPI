@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { loginService, registerService } from "../services/auth.service";
+import { AuthenticatedRequest } from "../types/auth.types";
 
 export async function registerController(
     req: Request,
@@ -29,6 +30,23 @@ export async function loginController(
         return res.status(200).json({
         message: "Login correcto",
         data: result
+        });
+    } catch (error) {
+        next(error);
+    }
+}
+
+export async function meController(
+    req: AuthenticatedRequest,
+    res: Response,
+    next: NextFunction
+    ) {
+    try {
+        return res.status(200).json({
+        message: "Usuario autenticado",
+        data: {
+            user: req.user
+        }
         });
     } catch (error) {
         next(error);
