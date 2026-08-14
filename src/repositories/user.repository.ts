@@ -12,6 +12,17 @@ const userSafeSelect = {
     updatedAt: true
 } as const;
 
+const userWithPasswordSelect = {
+    id: true,
+    name: true,
+    email: true,
+    passwordHash: true,
+    role: true,
+    isActive: true,
+    createdAt: true,
+    updatedAt: true
+} as const;
+
 type CreateUserData = {
     name: string;
     email: string;
@@ -80,5 +91,15 @@ export function deactivateUser(id: number) {
         isActive: false
         },
         select: userSafeSelect
+    });
+}
+
+//Dia 34 ----------------------------------------------------------
+export function findUserByEmailWithPassword(email: string) {
+    return prisma.user.findUnique({
+        where: {
+        email
+        },
+        select: userWithPasswordSelect
     });
 }
