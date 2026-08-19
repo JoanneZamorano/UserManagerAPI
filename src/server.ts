@@ -2,11 +2,18 @@ import express, { Request, Response, NextFunction } from "express";
 import { healthRouter } from "./routes/health.routes";
 import { userRouter } from "./routes/user.routes";
 import { authRouter } from "./routes/auth.routes";
+import cors from "cors";
 
 const app = express();
 const PORT = 3000;
 
 app.use(express.json());
+
+app.use(
+    cors({
+        origin: "http://localhost:3001"
+    })
+);
 
 app.use("/api/health", healthRouter);
 app.use("/api/users", userRouter);
