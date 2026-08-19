@@ -158,3 +158,7 @@ export async function deactivateUserService(id: number) {
     return deactivateUser(id);
 }
 
+export async function getCurrentUserService(userId: number) {
+    return getUserByIdService(userId);
+}
+

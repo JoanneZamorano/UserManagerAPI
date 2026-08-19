@@ -1,12 +1,18 @@
 import { Request, Response, NextFunction } from "express";
 import {
-    getUserByIdService,
     createUserService,
     deactivateUserService,
+    getCurrentUserService,
+    getUserByIdService,
     listUsersService,
     updateUserService
 } from "../services/user.service";
 import { parseIdParam } from "../utils/parse.utils";
+import { AuthenticatedRequest } from "../types/auth.types";
+import { AppError } from "../errors/AppError";
+
+
+
 
 const userSafeSelect = {
     id: true,
@@ -82,6 +88,10 @@ export async function updateUserController(
     try {
         const id = parseIdParam(req.params.id as string);
 
+        if ((req as any).user?.role !== "ADMIN" && Object.prototype.hasOwnProperty.call(req.body, "isActive")) {
+        throw new AppError("Solo un ADMIN puede cambiar el estado de un usuario", 403);
+        }
+
         const updatedUser = await updateUserService(id, req.body);
 
         return res.status(200).json({
@@ -106,6 +116,27 @@ export async function deleteUserController(
         return res.status(200).json({
         message: "Usuario desactivado correctamente",
         data: deactivatedUser
+        });
+    } catch (error) {
+        next(error);
+    }
+}
+
+export async function getCurrentUser(
+    req: AuthenticatedRequest,
+    res: Response,
+    next: NextFunction
+    ) {
+    try {
+        if (!req.user) {
+        throw new AppError("Usuario no autenticado", 401);
+        }
+
+        const user = await getCurrentUserService(req.user.userId);
+
+        return res.status(200).json({
+        message: "Usuario autenticado obtenido correctamente",
+        data: user
         });
     } catch (error) {
         next(error);
