@@ -80,12 +80,12 @@ flowchart LR
 | PostgreSQL activo | ![Imagen](./images/dia38_1.png) |
 | Backend activo en puerto 3000 | ![Imagen](./images/dia38_2.png) |
 | Frontend activo en puerto 3001 | ![Imagen](./images/dia38_3.png) |
-| `/api/health` responde | ![Imagen](./images/dia38_4.png) |
+| `/api/health` responde | ![Imagen](./images/dia38_1.png) |
 | `.env.local` configurado | ![Imagen](./images/dia38_5.png) |
 | Login correcto desde frontend | ![Imagen](./images/dia38_6.png) |
 | Token guardado en localStorage | ![Imagen](./images/dia38_7.png) |
-| Dashboard carga perfil | ![Imagen](./images/dia38_8.png) |
-| Se envía cabecera Authorization | ![Imagen](./images/dia38_9.png) |
+| Dashboard carga perfil | ![Imagen](./images/dia38_9.png) |
+| Se envía cabecera Authorization | ![Imagen](./images/dia38_8.png) |
 | USER recibe 403 en panel admin | ![Imagen](./images/dia38_10.png) |
 | ADMIN accede al panel admin | ![Imagen](./images/dia38_11.png) |
 | Logout elimina token | ![Imagen](./images/dia38_12.png) |
