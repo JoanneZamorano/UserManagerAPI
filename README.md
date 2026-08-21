@@ -860,29 +860,6 @@ El proyecto sigue una arquitectura por capas:
 Route → Controller → Service → Repository → Prisma → PostgreSQL
 ```
 
-Estructura principal:
-
-```text
-src/
-  prisma.ts
-  server.ts
-  controllers/
-    health.controller.ts
-    user.controller.ts
-  errors/
-    AppError.ts
-  repositories/
-    user.repository.ts
-  routes/
-    health.routes.ts
-    user.routes.ts
-  services/
-    user.service.ts
-  utils/
-    parse.utils.ts
-    string.utils.ts
-```
-
 Rutas principales:
 
 | Método | Ruta | Acción |
@@ -1163,33 +1140,38 @@ Códigos importantes:
 - [Día 35 - Generación de token JWT](docs/dia-35-jwt.md)
 - [Día 36 - Middleware de autenticación](docs/dia-36-auth-middleware.md)
 - [Día 37 - Roles y permisos](docs/dia-37-roles-permisos.md)
+- [Día 38 - Frontend: Conexión con la API](docs/dia-38-frontend-conexion-api.md)
+- [Día 39 - Pruebas de integración con frontend](docs/dia-39-pruebas-integracion-frontend.md)
+- [Día 40 - Revisión final del proyecto](docs/dia-40-revision-final.md)
 
 # Arquitectura proyecto
 ```text
 src/
-  controllers/
-    auth.controller.ts
-    health.controller.ts
-    user.controller.ts
-  errors/
-    AppError.ts
-  middlewares/
-    auth.middleware.ts
-    role.middleware.ts
-  repositories/
-    user.repository.ts
-  routes/
-    auth.routes.ts
-    health.routes.ts
-    user.routes.ts
-  services/
-    auth.service.ts
-    user.service.ts
-  types/
-    auth.types.ts
-  utils/
-    jwt.utils.ts
-    parse.utils.ts
-    password.utils.ts
-    string.utils.ts
+├── controllers/          # Gestión de peticiones HTTP y respuestas
+│   ├── auth.controller.ts
+│   ├── health.controller.ts
+│   └── user.controller.ts
+├── errors/               # Manejo centralizado de excepciones
+│   └── AppError.ts
+├── middlewares/          # Interceptores de autenticación y autorización
+│   ├── auth.middleware.ts
+│   └── role.middleware.ts
+├── repositories/         # Acceso a base de datos con Prisma
+│   └── user.repository.ts
+├── routes/               # Enrutamiento de endpoints
+│   ├── auth.routes.ts
+│   ├── health.routes.ts
+│   └── user.routes.ts
+├── services/             # Lógica de negocio y validaciones
+│   ├── auth.service.ts
+│   └── user.service.ts
+├── types/                # Tipos e interfaces globales
+│   └── auth.types.ts
+├── utils/                # Funciones auxiliares y helpers
+│   ├── jwt.utils.ts
+│   ├── parse.utils.ts
+│   ├── password.utils.ts
+│   └── string.utils.ts
+├── prisma.ts             # Cliente de conexión Prisma
+└── server.ts             # Servidor Express principal
 ```
